@@ -122,18 +122,18 @@
                     mes_1:'Ngày tham gia bắt đầu từ ngày 01/11/2022 tới 01/12/2022',
                     span: day_joinSpan,
                     label: day_joinLabel,
+                    check: true,
                     already: false,
                     
                 }
             ]
 
-
             const resultImformations = []
-
+            
             Validation.map((item) => {
                 let elem = item.name
                 let stt = 1
-
+                
                 const handelNotValue = () => {
                     item.label.remove(text_success)
                     item.label.addClass(text_danger)
@@ -156,13 +156,15 @@
                     elem.addClass(border_success)
                     item.span.text("")
                     item.already = true
+                    
                 }
-
+                
                 elem.blur(() => {
                     if(elem.val() === '')
                     {
                         handelNotValue();
                     } else if(item.check) {
+                        if(item.check == true) {handelSuccessValue()}
                         if(item.check.test(elem.val())){
                             handelSuccessValue();
                         } else {
@@ -170,16 +172,29 @@
                         }
                     }
                 })
+                let imf = {
+                    stt,
+                    idStudents : idStudents.value,
+                    name,
+                    Class,
+                    day_join,
+                    telNumber,
+                    email,
+                }
+                
+                const handelRender = () => {
+                    resultImformations.push(imf)
+                    console.log(resultImformations);
+                }
 
                 $('#submit').click(() => {
-                    if(!item.already)
-                    {
-                        handelNotValue();
-                    } else {
-                        resultImformations.push({
-                            
-                        })
-                    }
+                    // if(!item.already)
+                    // {
+                    //     handelNotValue();
+                    // } else {
+                    //     handelRender();
+                    // }
+                    handelRender()
                 })
             })
         })
@@ -213,7 +228,7 @@
             </div>
         </div>
         <div class="row">
-            <table class="table-bordered table-light table-hover table-primary table table-striped" >
+            <table class="table-bordered table-light table-hover table-primary table table-striped" id="re-render">
                 <tr>
                     <th>STT</th>
                     <th>Mã thành viên</th>
@@ -232,9 +247,9 @@
                     <th>09987765</th>
                     <th>Anh moi</th>
                 </tr>
-                <td id="render">
+                <tr id="render">
 
-                </td>
+                </tr>
             </table>
         </div>
         <div class="row">
