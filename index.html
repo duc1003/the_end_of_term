@@ -38,7 +38,6 @@
             const checkClass = /^[A-Z0-9]{11}$/; // d keytest Class
             const checkTelPhone = /^(0){1}[0-9]{3}(-){1}[0-9]{3}(-){1}[0-9]{3}$/ // keytest telNumber 
             const checkEmail = /(^(\w)*@(iuh.edu.vn))$/
-
             //variable
             const idStudents = $('#idStudents')
             const idStudentsSpan = $('#idStudentsSpan')
@@ -67,16 +66,6 @@
             const Validation = [
                 {
                     id: 1,
-                    name: name,
-                    mes: 'Bắt buộc nhập!',
-                    mes_1:'Vui lòng nhập đúng tên! Yêu cầu chữ cái đầu viết hoa!',
-                    span: nameSpan,
-                    label: nameLabel,
-                    check: checkName,
-                    already: false,
-                },
-                {
-                    id: 2,
                     name: idStudents,
                     mes: 'Bắt buộc nhập!',
                     mes_1:'Vui lòng nhập đúng mã!',
@@ -86,117 +75,106 @@
                     already: false,
                 },
                 {
-                    id: 3,
-                    name: Class,
+                    id: 2,
+                    name: name,
                     mes: 'Bắt buộc nhập!',
-                    mes_1:'Vui lòng viết in hoa!',
-                    span: CLassSpan,
-                    label: ClassLable,
-                    check: checkClass,
+                    mes_1:'Vui lòng nhập đúng tên! Yêu cầu chữ cái đầu viết hoa!',
+                    span: nameSpan,
+                    label: nameLabel,
+                    check: checkName,
                     already: false,
                 },
-                {
-                    id: 4,
-                    name: telNumber,
-                    mes: 'Bắt buộc nhập!',
-                    mes_1:'Vui lòng nhập đúng số điện thoại!',
-                    span: telNumberSpan,
-                    label: telNumberLabel,
-                    check: checkTelPhone,
-                    already: false,
-                },
-                {
-                    id: 5,
-                    name: email,
-                    mes: 'Bắt buộc nhập!',
-                    mes_1:'Vui lòng nhập đúng email của bạn!',
-                    span: emailspan,
-                    label: emaillabel,
-                    check: checkEmail,
-                    already: false,
-                },
-                {
-                    id: 6,
-                    name: day_join,
-                    mes: 'Bắt buộc nhập!',
-                    mes_1:'Ngày tham gia bắt đầu từ ngày 01/11/2022 tới 01/12/2022',
-                    span: day_joinSpan,
-                    label: day_joinLabel,
-                    check: true,
-                    already: false,
+                // {
+                //     id: 3,
+                //     name: Class,
+                //     mes: 'Bắt buộc nhập!',
+                //     mes_1:'Vui lòng viết in hoa!',
+                //     span: CLassSpan,
+                //     label: ClassLable,
+                //     check: checkClass,
+                //     already: false,
+                // },
+                // {
+                //     id: 4,
+                //     name: day_join,
+                //     mes: 'Bắt buộc nhập!',
+                //     mes_1:'Ngày tham gia bắt đầu từ ngày 01/11/2022 tới 01/12/2022',
+                //     span: day_joinSpan,
+                //     label: day_joinLabel,
+                //     check: true,
+                //     already: false,
                     
-                }
+                // },
+                // {
+                //     id: 5,
+                //     name: telNumber,
+                //     mes: 'Bắt buộc nhập!',
+                //     mes_1:'Vui lòng nhập đúng số điện thoại!',
+                //     span: telNumberSpan,
+                //     label: telNumberLabel,
+                //     check: checkTelPhone,
+                //     already: false,
+                // },
+                // {
+                //     id: 6,
+                //     name: email,
+                //     mes: 'Bắt buộc nhập!',
+                //     mes_1:'Vui lòng nhập đúng email của bạn!',
+                //     span: emailspan,
+                //     label: emaillabel,
+                //     check: checkEmail,
+                //     already: false,
+                // },
             ]
 
-            const resultImformations = []
             
+            const handelNotValue = (item, elem) => {
+                item.label.remove(text_success)
+                item.label.addClass(text_danger)
+                elem.removeClass(border_success)
+                elem.addClass(border_danger)
+                item.span.text(item.mes)
+            }
+            const handelErrorValue = (item, elem) => {
+                elem.removeClass(border_success)
+                elem.addClass(border_danger)
+                item.label.remove(text_success,text_danger)
+                item.label.addClass(text_danger)
+                item.span.text(item.mes_1)
+            }
+            const handelSuccessValue = (item, elem) => {
+                item.label.removeClass(text_danger)
+                item.label.addClass(text_success)
+                elem.removeClass(border_danger)
+                elem.addClass(border_success)
+                item.span.text("")
+                item.already = true
+                
+            }
+            const resultImformations = []
             Validation.map((item) => {
                 let elem = item.name
                 let stt = 1
-                
-                const handelNotValue = () => {
-                    item.label.remove(text_success)
-                    item.label.addClass(text_danger)
-                    elem.removeClass(border_success)
-                    elem.addClass(border_danger)
-                    item.span.text(item.mes)
-                }
-                const handelErrorValue = () => {
-                    elem.removeClass(border_success)
-                    elem.addClass(border_danger)
-                    item.label.remove(text_success,text_danger)
-                    item.label.addClass(text_danger)
-                    item.span.text(item.mes_1)
-                }
 
-                const handelSuccessValue = () => {
-                    item.label.removeClass(text_danger)
-                    item.label.addClass(text_success)
-                    elem.removeClass(border_danger)
-                    elem.addClass(border_success)
-                    item.span.text("")
-                    item.already = true
-                    
-                }
-                
                 elem.blur(() => {
                     if(elem.val() === '')
                     {
-                        handelNotValue();
+                        handelNotValue(item, elem);
                     } else if(item.check) {
-                        if(item.check == true) {handelSuccessValue()}
+                        if(item.check == true) {handelSuccessValue(item, elem)}
                         if(item.check.test(elem.val())){
-                            handelSuccessValue();
+                            handelSuccessValue(item,elem);
                         } else {
-                            handelErrorValue();
+                            handelErrorValue(item, elem);
                         }
                     }
                 })
-                let imf = {
-                    stt,
-                    idStudents : idStudents.value,
-                    name,
-                    Class,
-                    day_join,
-                    telNumber,
-                    email,
-                }
-                
-                const handelRender = () => {
-                    resultImformations.push(imf)
-                    console.log(resultImformations);
-                }
-
-                $('#submit').click(() => {
-                    // if(!item.already)
-                    // {
-                    //     handelNotValue();
-                    // } else {
-                    //     handelRender();
-                    // }
-                    handelRender()
-                })
+  
             })
+
+            const reRender = $('#re-render')
+
+
         })
 
     </script>
@@ -293,7 +271,7 @@
                                         <span class="text-danger" id="nameSpan">*</span>
                                     </div>
                                 </div>
-                                  <div class="row mb-3 container">
+                                  <!-- <div class="row mb-3 container">
                                     <div class="col-6 col-sm-3">
                                         <label id="classLable" for="">Lớp: </label>
                                     </div>
@@ -328,7 +306,7 @@
                                         <input type="text" class="form-control" placeholder="Email:xxxxx@iuh.deu.vn" id="email">
                                         <span class="text-danger" id="emailspan">*</span>
                                     </div>
-                                </div>
+                                </div> -->
             
                                   <div class="row mb-3 ">
                                     <div class="col">
