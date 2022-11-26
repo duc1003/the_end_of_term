@@ -42,6 +42,7 @@
             const checkTelPhone = /^(0){1}[0-9]{9}$/ // keytest telNumber 
             // const checkEmail = /(^(\w){5}@(iuh.edu.vn))$/ /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
             const checkEmail = /(^(\w)*@(iuh.edu.vn))$/
+            const checkDay = /^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/
 
             //variable
             const render = $('#render');
@@ -101,49 +102,39 @@
                     check: checkClass,
                     already: false,
                 },
-                // {
-                //     id: 4,
-                //     name: telNumber,
-                //     mes: 'Bắt buộc nhập!',
-                //     mes_1: 'Số điện thoại phải bắt đầu bằng số 0!',
-                //     span: telNumberSpan,
-                //     label: telNumberLabel,
-                //     check: checkTelPhone,
-                //     already: false,
-                // },
-                // {
-                //     id: 5,
-                //     name: email,
-                //     mes: 'Bắt buộc nhập!',
-                //     mes_1: 'Vui lòng nhập đúng email của bạn!',
-                //     span: emailspan,
-                //     label: emaillabel,
-                //     check: checkEmail,
-                //     already: false,
-                // },
-                // {
-                //     id: 6,
-                //     name: day_join,
-                //     mes: 'Bắt buộc nhập!',
-                //     mes_1:'Ngày tham gia bắt đầu từ ngày 01/11/2022 tới 01/12/2022',
-                //     span: day_joinSpan,
-                //     label: day_joinLabel,
-                //     already: false,
-
-                // }
-            ]
-
-
-            const resultImformations = [
                 {
-                    id: 0,
-                    mssv: 'K16-123456789',
-                    name: 'NGUYEN DINH DUC ',
-                    class: 'DHCNTT17BTT',
-                    num: '0123456789',
-                    email: 'dong@iuh.edu.vn'
+                    id: 4,
+                    name: telNumber,
+                    mes: 'Bắt buộc nhập!',
+                    mes_1: 'Số điện thoại phải bắt đầu bằng số 0!',
+                    span: telNumberSpan,
+                    label: telNumberLabel,
+                    check: checkTelPhone,
+                    already: false,
+                },
+                {
+                    id: 5,
+                    name: email,
+                    mes: 'Bắt buộc nhập!',
+                    mes_1: 'Vui lòng nhập đúng email của bạn!',
+                    span: emailspan,
+                    label: emaillabel,
+                    check: checkEmail,
+                    already: false,
+                },
+                {
+                    id: 6,
+                    name: day_join,
+                    mes: 'Bắt buộc nhập!',
+                    mes_1:'Ngày tham gia bắt đầu từ ngày 01/11/2022 tới 01/12/2022',
+                    span: day_joinSpan,
+                    label: day_joinLabel,
+                    check: checkDay,
+                    already: false,
+
                 }
             ]
+
 
             const handelNotValue = (item, elem) => {
                 item.label.remove(text_success)
@@ -151,6 +142,7 @@
                 elem.removeClass(border_success)
                 elem.addClass(border_danger)
                 item.span.text(item.mes)
+                item.already = false
             }
 
             const handelErrorValue = (item, elem) => {
@@ -159,6 +151,7 @@
                 item.label.remove(text_success, text_danger)
                 item.label.addClass(text_danger)
                 item.span.text(item.mes_1)
+                item.already = false
             }
 
             const handelSuccessValue = (item, elem) => {
@@ -169,18 +162,24 @@
                 item.span.text("")
                 item.already = true
             }
+            const handelRemoveClass = (item, elem) => {
+                item.label.removeClass(text_danger)
+                item.label.removeClass(text_success)
+                elem.removeClass(border_danger)
+                elem.removeClass(border_success)
+                item.span.text("*")
+            }
+
 
             Validation.map((item) => {
                 let elem = item.name
 
                 elem.blur(() => {
-                    console.log(elem);
                     if (elem.val() === '') {
                         handelNotValue(item, elem);
                     } else if (item.check) {
                         if (item.check.test(elem.val())) {
                             handelSuccessValue(item, elem);
-
                         } else {
                             handelErrorValue(item, elem);
                         }
@@ -188,34 +187,50 @@
                 })
 
             })
-            const addIf = ([a, b, c, d, e]) => {
+            const resultImformations = []
+            let stt = 0
+
+            const addIf = (stt,[a, b, c, d, e]) => {
 
                 const people = {
+                    stt: stt,
                     mssv: a,
                     name: b,
                     class: c,
                     num: d,
                     email: e,
-
                 }
-                resultImformations.push(people)
+                render.append(`<tr>
+                          <th>${people.stt}</th>  
+                          <th>${people.mssv}</th>  
+                          <th>${people.name}</th>  
+                          <th>${people.class}</th>  
+                          <th>${people.num}</th>  
+                          <th>${people.email}</th>  
+                        </tr>`)
             }
+
             $('#submit').click(() => {
-                // console.log(item.already);
-                const result = []
-                Validation.map((item) => {
-                    if (!item.already) {
-                        handelNotValue(item, item.name);
+                let checked = true;
+                Validation.map(item => {
+                    if(!item.already)
+                    {
+                        handelNotValue(item,item.name)
+                        checked = false
                     }
-                    else {
+                })  
+                if(checked) {
+                    const result = []
+                    Validation.map(item => {
                         result.push(item.name.val())
-                    }
-                })
-                if (result.length != 0) {
-                    addIf(result);
+                        item.name.val('')
+                        handelRemoveClass(item, item.name)
+                        $('#registerModal').modal('hide')
+                    })
+                    addIf(stt,result)
+                    stt++;
                 }
-                console.log(result);
-                console.log(resultImformations);
+
             })
 
 
@@ -314,7 +329,7 @@
                                     </div>
                                     <span class="text-danger" id="classSpan">*</span>
                                 </div>
-                                <!-- <div class="row mb-3 container">
+                                <div class="row mb-3 container">
                                     <div class="col-6 col-sm-3">
                                         <label id="day_joinLabel" for="">Ngày tham gia:</label>
                                     </div>
@@ -342,7 +357,7 @@
                                             id="email">
                                     </div>
                                     <span class="text-danger" id="emailspan">*</span>
-                                </div> -->
+                                </div>
 
                                 <div class="row mb-3 ">
                                     <div class="col">
