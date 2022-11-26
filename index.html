@@ -29,335 +29,262 @@
 
     <script>
         $(document).ready(() => {
-
-            $('#register').click(() => {
-                $('#registerModal').modal('show')
+            $('#register-btn').click(() => {
+                $('#register').modal('show')
+            })
+            $('#close-btn').click(() => {
+                $('#register').modal('hide')
             })
 
-            // regex
-            const checkId = /^(K16-){1}([0-9]){9}$/; // b keytest mssv 
-            const checkName = /(^[A-Z]{1})([a-z]+)(\s[A-Z]{1}([a-z])*)*$/ // c keytest name
-            const checkClass = /^[A-Z0-9]{11}$/; // d keytest Class
-            // const checkTelPhone = /^(0){1}[0-9]{9}$/ // keytest telNumber 
-            const checkTelPhone = /^(0){1}[0-9]{9}$/ // keytest telNumber 
-            // const checkEmail = /(^(\w){5}@(iuh.edu.vn))$/ /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-            const checkEmail = /(^(\w)*@(iuh.edu.vn))$/
-
-            //variable
-            const render = $('#render');
-            const idStudents = $('#idStudents')
-            const idStudentsSpan = $('#idStudentsSpan')
-            const idStudentsLable = $('#idStudentsLable')
-            const name = $('#name')
-            const nameSpan = $('#nameSpan')
-            const nameLabel = $('#nameLabel')
-            const telNumber = $('#telNumber')
-            const telNumberSpan = $('#telNumberSpan')
-            const telNumberLabel = $('#telNumberLabel')
-            const Class = $('#class')
-            const CLassSpan = $('#classSpan')
-            const ClassLable = $('#classLable')
-            const day_join = $('#day_join')
-            const day_joinSpan = $('#day_joinSpan')
-            const day_joinLabel = $('#day_joinLabel')
-            const email = $('#email')
-            const emailspan = $('#emailspan')
-            const emaillabel = $('#emaillabel')
-            const text_success = 'text-success'
-            const text_danger = 'text-danger'
-            const border_success = 'border-success'
-            const border_danger = 'border-danger'
-
-            // Validate
+            // Validaytion
             const Validation = [
                 {
-                    id: 1,
-                    name: idStudents,
-                    mes: 'Bắt buộc nhập!',
-                    mes_1: 'Vui lòng nhập đúng mã!',
-                    span: idStudentsSpan,
-                    label: idStudentsLable,
-                    check: checkId,
+                    name: $('#mssv'),
+                    label:$('#mssv-label'),
+                    span:$('#mssv-span'),
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    check: /^(K16-){1}([0-9]){9}$/,
                     already: false,
                 },
                 {
-                    id: 2,
-                    name: name,
-                    mes: 'Bắt buộc nhập!',
-                    mes_1: 'Vui lòng nhập đúng tên! Yêu cầu chữ cái đầu viết hoa!',
-                    span: nameSpan,
-                    label: nameLabel,
-                    check: checkName,
+                    name: $('#name'),
+                    label:$('#name-label'),
+                    span:$('#name-span'),
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    check: /(^[A-Z]{1})([a-z]+)(\s[A-Z]{1}([a-z])*)*$/,
                     already: false,
                 },
-
                 {
-                    id: 3,
-                    name: Class,
-                    mes: 'Bắt buộc nhập!',
-                    mes_1: 'Vui lòng viết in hoa!',
-                    span: CLassSpan,
-                    label: ClassLable,
-                    check: checkClass,
+                    name: $('#cla'),
+                    label:$('#cla-label'),
+                    span:$('#cla-span'),
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    check: /^[A-Z0-9]{11}$/,
                     already: false,
                 },
-                // {
-                //     id: 4,
-                //     name: telNumber,
-                //     mes: 'Bắt buộc nhập!',
-                //     mes_1: 'Số điện thoại phải bắt đầu bằng số 0!',
-                //     span: telNumberSpan,
-                //     label: telNumberLabel,
-                //     check: checkTelPhone,
-                //     already: false,
-                // },
-                // {
-                //     id: 5,
-                //     name: email,
-                //     mes: 'Bắt buộc nhập!',
-                //     mes_1: 'Vui lòng nhập đúng email của bạn!',
-                //     span: emailspan,
-                //     label: emaillabel,
-                //     check: checkEmail,
-                //     already: false,
-                // },
-                // {
-                //     id: 6,
-                //     name: day_join,
-                //     mes: 'Bắt buộc nhập!',
-                //     mes_1:'Ngày tham gia bắt đầu từ ngày 01/11/2022 tới 01/12/2022',
-                //     span: day_joinSpan,
-                //     label: day_joinLabel,
-                //     already: false,
-
-                // }
-            ]
-
-
-            const resultImformations = [
                 {
-                    id: 0,
-                    mssv: 'K16-123456789',
-                    name: 'NGUYEN DINH DUC ',
-                    class: 'DHCNTT17BTT',
-                    num: '0123456789',
-                    email: 'dong@iuh.edu.vn'
+                    name: $('#day'),
+                    label:$('#day-label'),
+                    span:$('#day-span'),
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    check: /^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/,
+                    already: false,
+                },
+                {
+                    name: $('#num'),
+                    label:$('#num-label'),
+                    span:$('#num-span'),
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    check: /^(0){1}[0-9]{9}$/,
+                    already: false,
+                },
+                {
+                    name: $('#email'),
+                    label:$('#email-label'),
+                    span:$('#email-span'),
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    check: /(^(\w)*@(iuh.edu.vn))$/,
+                    already: false,
                 }
             ]
-
-            const handelNotValue = (item, elem) => {
-                item.label.remove(text_success)
-                item.label.addClass(text_danger)
-                elem.removeClass(border_success)
-                elem.addClass(border_danger)
-                item.span.text(item.mes)
+            
+            
+            const handelNotValue = (item) => {
+                item.label.remove("text-success")
+                item.label.addClass("text-danger")
+                item.name.removeClass("border-success")
+                item.name.addClass("border-danger")
+                item.span.text(item.mes_default)
+                item.already = false
             }
 
-            const handelErrorValue = (item, elem) => {
-                elem.removeClass(border_success)
-                elem.addClass(border_danger)
-                item.label.remove(text_success, text_danger)
-                item.label.addClass(text_danger)
-                item.span.text(item.mes_1)
+            const handelErrorValue = (item) => {
+                item.label.remove("text-success")
+                item.label.addClass("text-danger")
+                item.name.removeClass("border-success")
+                item.name.addClass("border-danger")
+                item.span.text(item.mes_error)
+                item.already = false
             }
 
-            const handelSuccessValue = (item, elem) => {
-                item.label.removeClass(text_danger)
-                item.label.addClass(text_success)
-                elem.removeClass(border_danger)
-                elem.addClass(border_success)
+            const handelSuccessValue = (item) => {
+                item.label.removeClass("text-danger")
+                item.label.addClass("text-success")
+                item.name.removeClass("border-danger")
+                item.name.addClass("border-success")
                 item.span.text("")
                 item.already = true
             }
-
-            Validation.map((item) => {
-                let elem = item.name
-
-                elem.blur(() => {
-                    console.log(elem);
-                    if (elem.val() === '') {
-                        handelNotValue(item, elem);
-                    } else if (item.check) {
-                        if (item.check.test(elem.val())) {
-                            handelSuccessValue(item, elem);
-
-                        } else {
-                            handelErrorValue(item, elem);
-                        }
-                    }
-                })
-
-            })
-            const addIf = ([a, b, c, d, e]) => {
-
-                const people = {
-                    mssv: a,
-                    name: b,
-                    class: c,
-                    num: d,
-                    email: e,
-
-                }
-                resultImformations.push(people)
+            const handelRemoveClass = (item) => {
+                item.label.removeClass("text-danger")
+                item.label.removeClass("text-success")
+                item.name.removeClass("border-danger")
+                item.name.removeClass("border-success")
+                item.name.val('')
+                item.span.text("*")
+                $('#register').modal('hide')
             }
-            $('#submit').click(() => {
-                // console.log(item.already);
-                const result = []
-                Validation.map((item) => {
-                    if (!item.already) {
-                        handelNotValue(item, item.name);
-                    }
-                    else {
-                        result.push(item.name.val())
+
+            Validation.map(item => {
+                item.name.blur(() => {
+                    if(item.name.val() === ''){handelNotValue(item)}
+                    else if(item.check.test(item.name.val())){
+                        handelSuccessValue(item)
+                    } else {
+                        handelErrorValue(item)
                     }
                 })
-                if (result.length != 0) {
-                    addIf(result);
-                }
-                console.log(result);
-                console.log(resultImformations);
             })
-
-
+            const render = $('#render')
+            let i = 0
+            $('#submit').click(() => {
+                let checked = true
+                Validation.map(item => {
+                    if(!item.already)
+                    {
+                        handelNotValue(item)
+                        checked = false
+                    }
+                })
+                if(checked)
+                {
+                    render.append(`<tr>
+                        <th>${i}</th>
+                        ${
+                            Validation.map(item => (
+                                `<th>${item.name.val()}</th>`
+                            ))
+                        }
+                    </tr>`)
+                    i++;
+                    for (let x in Validation){handelRemoveClass(Validation[x])}
+                }
+            })
+            
         })
     </script>
-
-
 </head>
 
 <body>
     <div class="container border">
         <div class="row">
-            <img src="./banner.PNG" alt="DHCNTPHCM" width="100%">
+            <img src="./banner.PNG" alt="background" width="100%">
         </div>
         <div class="row">
-            <div class="col-12 col-sm-12">
-                <nav class="navbar-collapse navbar-expand">
-                    <ul class="navbar-nav navbar-dark">
-                        <li class="nav-item ">
-                            <a href="#" class="nav-link">Dang nhap</a>
-                        </li>
-                        <li class="nav-item" id="register">
-                            <a href="#" class="nav-link">Dang ki</a>
-                        </li>
-                    </ul>
-                </nav>
+            <nav class="navbar-collapse navbar-expand">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#">Đăng nhập</a></li>
+                    <li class="nav-item" id="register-btn"><a class="nav-link" href="#">Đăng kí</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-10 col-sm-10">
+                <h2 class="text-center text-uppercase">Danh sách tham gia đội robocon khoa cntt</h2>
             </div>
         </div>
+        
         <div class="row">
-            <div class="col-12 col-sm-12" style="display: flex;justify-content: center;">
-                <h1 class="text-center" style="width: 90%;">DANH SÁCH THAM GIA ĐỘI ROBOCO KHOA CNTT</h1>
-            </div>
-        </div>
-        <div class="row">
-            <table class="table-bordered table-light table-hover table-primary table table-striped" id="render">
+            <table class="table table-bordered table-hover" id="render">
                 <tr>
                     <th>STT</th>
-                    <th>MSSV</th>
-                    <th>Ho ten</th>
-                    <th>Lop</th>
-                    <th>Dien thoai</th>
+                    <th>Mã thành viên</th>
+                    <th>Họ tên</th>
+                    <th>Lớp</th>
+                    <th>Ngày tham gia</th>
+                    <th>Điện thoại</th>
                     <th>Email</th>
                 </tr>
             </table>
         </div>
-        <div class="row">
-            <div class="col-12 col-sm-12" style="display: flex;justify-content: center;">
-                <span>
-                    <p>SVTH: Nguyễn Đình Đức</p>
-                </span>
-                <span>
-                    <p>. MSSV: 21132371</p>
-                </span>
-                <span>
-                    <p>. Lop:DHCNTT17B</p>
-                </span>
+        <div class="row justify-content-center">
+            <div class="col-10 col-sm-10 text-center" >
+                <p>SVTH: ............  MSSV: ............  Lop: ............</p>
+
             </div>
         </div>
+
         <div class="row">
-            <div class="modal " id="registerModal" aria-hidden="true" style="display: none;">
+            <div class="modal" id="register">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4>THONG TIN CA NHAN</h4>
-                            <button type="button" class="close border-1 bg-transparent" id="close-modal-btn"
-                                data-dismiss="modal">X</button>
+                            <h4 class="text-uppercase">Thông tin cá nhân</h4>
+                            <button id="close-btn" class="text-right align-text-top border-0 bg-transparent">x</button>
                         </div>
+
                         <div class="modal-body">
-                            <form class="form-control" id="dangkiform">
-                                <div class="row mb-3 container">
+                            <form class="form-control">
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
                                     <div class="col-6 col-sm-3">
-                                        <label for="" id="idStudentsLable">Mã thành viên:</label>
+                                        <label id="mssv-label">Mã thành viên:</label>
                                     </div>
                                     <div class="col-6 col-sm-9">
-                                        <input type="text" class="form-control" placeholder="K16-xxxxxxxxxxx"
-                                            id="idStudents">
+                                        <input id="mssv" class="form-control" type="text" placeholder="Mã: K16-123456789">
+                                        <span id="mssv-span" class="text-danger">*</span>
                                     </div>
-                                    <span class="text-danger" id="idStudentsSpan">*</span>
                                 </div>
-                                <div class="row mb-3 container ">
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
                                     <div class="col-6 col-sm-3">
-                                        <label id="nameLabel">Họ tên:</label>
+                                        <label id="name-label">Họ tên:</label>
                                     </div>
                                     <div class="col-6 col-sm-9">
-                                        <input type="text" class="form-control " id="name"
-                                            placeholder="Họ tên: Nguyễn Văn A" name="name">
+                                        <input id="name" class="form-control" type="text" placeholder="Họ tên: Tran Anh Dung">
+                                        <span id="name-span" class="text-danger">*</span>
                                     </div>
-                                    <span class="text-danger" id="nameSpan">*</span>
                                 </div>
-                                <div class="row mb-3 container">
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
                                     <div class="col-6 col-sm-3">
-                                        <label id="classLable" for="">Lớp: </label>
+                                        <label id="cla-label">Lớp:</label>
                                     </div>
                                     <div class="col-6 col-sm-9">
-                                        <input type="text" class="form-control" placeholder="Lớp:DHCNTT17B" id="class">
+                                        <input id="cla" class="form-control" type="text" placeholder="Lớp: DHKTPM16ATT">
+                                        <span id="cla-span" class="text-danger">*</span>
                                     </div>
-                                    <span class="text-danger" id="classSpan">*</span>
                                 </div>
-                                <!-- <div class="row mb-3 container">
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
                                     <div class="col-6 col-sm-3">
-                                        <label id="day_joinLabel" for="">Ngày tham gia:</label>
+                                        <label id="day-label">Ngày tham gia:</label>
                                     </div>
                                     <div class="col-6 col-sm-9">
-                                        <input type="date" class="form-control" id="day_join">
+                                        <input id="day" class="form-control" type="date" placeholder="day">
+                                        <span id="day-span" class="text-danger">*</span>
                                     </div>
-                                    <span class="text-danger" id="day_joinSpan">*</span>
                                 </div>
-                                <div class="row mb-3 container">
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
                                     <div class="col-6 col-sm-3">
-                                        <label for="" id="telNumberLabel">Số điện thoại: </label>
+                                        <label id="num-label">Số điện thoại:</label>
                                     </div>
                                     <div class="col-6 col-sm-9">
-                                        <input type="text" class="form-control" placeholder="telNumber:0xxx-xxx-xxx"
-                                            id="telNumber">
+                                        <input id="num" class="form-control" type="text" placeholder="SDT: 0xxx-xxx-xxx">
+                                        <span id="num-span" class="text-danger">*</span>
                                     </div>
-                                    <span class="text-danger" id="telNumberSpan">*</span>
                                 </div>
-                                <div class="row mb-3 container">
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
                                     <div class="col-6 col-sm-3">
-                                        <label id="emaillabel" for="">Email</label>
+                                        <label id="email-label">Email:</label>
                                     </div>
                                     <div class="col-6 col-sm-9">
-                                        <input type="text" class="form-control" placeholder="Email:xxxxx@iuh.deu.vn"
-                                            id="email">
+                                        <input id="email" class="form-control" type="text" placeholder="Email: xxxxxx@iuh.edu.vn">
+                                        <span id="email-span" class="text-danger">*</span>
                                     </div>
-                                    <span class="text-danger" id="emailspan">*</span>
-                                </div> -->
-
-                                <div class="row mb-3 ">
-                                    <div class="col">
-                                        <input type="button" class="col-12 col-sm-12 bg-success border-0" value="Lưu"
-                                            id="submit">
-                                    </div>
-
+                                </div>
+                                <div class="row border-top">
+                                    <input id="submit" type="button" class="col bg-success border-0 mb-3 mt-3 mr-3 ml-3" value="Lưu">
                                 </div>
                             </form>
                         </div>
-                        <div class="modal-footer"></div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </body>
 
