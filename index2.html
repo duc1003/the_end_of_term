@@ -35,14 +35,15 @@
             $('#close-btn').click(() => {
                 $('#register').modal('hide')
             })
-            // Validation
+
+            // Validaytion
             const Validation = [
                 {
                     name: $('#mssv'),
                     label: $('#mssv-label'),
                     span: $('#mssv-span'),
-                    mes_default: 'Bắt buộc nhập!',
-                    mes_error: 'Nhập sai',
+                    default: 'Bắt buộc nhập!',
+                    error: 'Nhập sai',
                     check: /^(K16-){1}([0-9]){9}$/,
                     already: false,
                 },
@@ -50,8 +51,8 @@
                     name: $('#name'),
                     label: $('#name-label'),
                     span: $('#name-span'),
-                    mes_default: 'Bắt buộc nhập!',
-                    mes_error: 'Nhập sai',
+                    default: 'Bắt buộc nhập!',
+                    error: 'Nhập sai',
                     check: /(^[A-Z]{1})([a-z]+)(\s[A-Z]{1}([a-z])*)*$/,
                     already: false,
                 },
@@ -59,8 +60,8 @@
                     name: $('#cla'),
                     label: $('#cla-label'),
                     span: $('#cla-span'),
-                    mes_default: 'Bắt buộc nhập!',
-                    mes_error: 'Nhập sai',
+                    default: 'Bắt buộc nhập!',
+                    error: 'Nhập sai',
                     check: /^[A-Z0-9]{11}$/,
                     already: false,
                 },
@@ -68,8 +69,8 @@
                     name: $('#day'),
                     label: $('#day-label'),
                     span: $('#day-span'),
-                    mes_default: 'Bắt buộc nhập!',
-                    mes_error: 'Nhập sai',
+                    default: 'Bắt buộc nhập!',
+                    error: 'Nhập sai',
                     check: /^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/,
                     already: false,
                 },
@@ -77,8 +78,8 @@
                     name: $('#num'),
                     label: $('#num-label'),
                     span: $('#num-span'),
-                    mes_default: 'Bắt buộc nhập!',
-                    mes_error: 'Nhập sai',
+                    default: 'Bắt buộc nhập!',
+                    error: 'Nhập sai',
                     check: /^(0){1}[0-9]{9}$/,
                     already: false,
                 },
@@ -86,82 +87,107 @@
                     name: $('#email'),
                     label: $('#email-label'),
                     span: $('#email-span'),
-                    mes_default: 'Bắt buộc nhập!',
-                    mes_error: 'Nhập sai',
+                    default: 'Bắt buộc nhập!',
+                    error: 'Nhập sai',
                     check: /(^(\w)*@(iuh.edu.vn))$/,
                     already: false,
                 }
             ]
 
 
-            const handelNotValue = (item) => {
-                item.label.remove("text-success")
-                item.label.addClass("text-danger")
-                item.name.removeClass("border-success")
-                item.name.addClass("border-danger")
-                item.span.text(item.mes_default)
-                item.already = false
+            const handelNotValue = (data) => {
+                data.label.remove("text-success")
+                data.label.addClass("text-danger")
+                data.name.removeClass("border-success")
+                data.name.addClass("border-danger")
+                data.span.text(data.default)
+                data.already = false
             }
 
-            const handelErrorValue = (item) => {
-                item.label.remove("text-success")
-                item.label.addClass("text-danger")
-                item.name.removeClass("border-success")
-                item.name.addClass("border-danger")
-                item.span.text(item.mes_error)
-                item.already = false
+            const handelErrorValue = (data) => {
+                data.label.remove("text-success")
+                data.label.addClass("text-danger")
+                data.name.removeClass("border-success")
+                data.name.addClass("border-danger")
+                data.span.text(data.error)
+                data.already = false
             }
 
-            const handelSuccessValue = (item) => {
-                item.label.removeClass("text-danger")
-                item.label.addClass("text-success")
-                item.name.removeClass("border-danger")
-                item.name.addClass("border-success")
-                item.span.text('')
-                item.already = true
+            const handelSuccessValue = (data) => {
+                data.label.removeClass("text-danger")
+                data.label.addClass("text-success")
+                data.name.removeClass("border-danger")
+                data.name.addClass("border-success")
+                data.span.text("")
+                data.already = true
             }
-            const handelRemoveClass = (item) => {
-                item.label.removeClass("text-danger")
-                item.label.removeClass("text-success")
-                item.name.removeClass("border-danger")
-                item.name.removeClass("border-success")
-                item.name.val('')
-                item.span.text("*")
+            const handelRemoveClass = (data) => {
+                data.label.removeClass("text-danger")
+                data.label.removeClass("text-success")
+                data.name.removeClass("border-danger")
+                data.name.removeClass("border-success")
+                data.name.val('')
+                data.span.text("*")
                 $('#register').modal('hide')
             }
 
-            Validation.map(item => {
-                item.name.blur(() => {
-                    if (item.name.val() === '') { handelNotValue(item) }
-                    else if (item.check.test(item.name.val())) {
-                        handelSuccessValue(item)
+            Validation.map(data => {
+                data.name.blur(() => {
+                    if (data.name.val() === '') { handelNotValue(data) }
+                    else if (data.check.test(data.name.val())) {
+                        handelSuccessValue(data)
                     } else {
-                        handelErrorValue(item)
+                        handelErrorValue(data)
                     }
                 })
             })
-            const render = $('#render')
-            let i = 0
+            const resultImformations = []
+            let stt = 0
+
+            const addIf = (stt, [a, b, c, d, e]) => {
+
+                const people = {
+                    stt: stt,
+                    mssv: a,
+                    name: b,
+                    class: c,
+                    num: d,
+                    email: e,
+                }
+
+                resultImformations.push(people)
+
+            }
+
             $('#submit').click(() => {
                 let checked = true
-                Validation.map(item => {
-                    if (!item.already) {
-                        handelNotValue(item)
+                Validation.map(data => {
+                    if (!data.already) {
+                        handelNotValue(data)
                         checked = false
                     }
                 })
                 if (checked) {
+                    const result = []
+                    Validation.map(item => {
+                        result.push(item.name.val())
+                        item.name.val('')
+                        handelRemoveClass(item, item.name)
+                        $('#registerModal').modal('hide')
+                    })
+                    addIf(stt, result)
+                    stt++;
                     render.append(`<tr>
-                        <th>${i}</th>
-                        ${Validation.map(item => (
-                        `<th>${item.name.val()}</th>`
-                    ))
-                        }
-                    </tr>`)
-                    i++;
-                    for (let x in Validation) { handelRemoveClass(Validation[x]) }
+                          <th>${resultImformations[resultImformations.length - 1].stt}</th>  
+                          <th>${resultImformations[resultImformations.length - 1].mssv}</th>  
+                          <th>${resultImformations[resultImformations.length - 1].name}</th>  
+                          <th>${resultImformations[resultImformations.length - 1].class}</th>  
+                          <th>${resultImformations[resultImformations.length - 1].num}</th>  
+                          <th>${resultImformations[resultImformations.length - 1].email}</th>  
+                        </tr>`)
                 }
             })
+
         })
     </script>
 </head>
