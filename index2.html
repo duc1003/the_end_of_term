@@ -200,14 +200,9 @@
                     num: d,
                     email: e,
                 }
-                render.append(`<tr>
-                          <th>${people.stt}</th>  
-                          <th>${people.mssv}</th>  
-                          <th>${people.name}</th>  
-                          <th>${people.class}</th>  
-                          <th>${people.num}</th>  
-                          <th>${people.email}</th>  
-                        </tr>`)
+
+                resultImformations.push(people)
+
             }
 
             $('#submit').click(() => {
@@ -229,6 +224,14 @@
                     })
                     addIf(stt,result)
                     stt++;
+                    render.append(`<tr>
+                          <th>${resultImformations[resultImformations.length-1].stt}</th>  
+                          <th>${resultImformations[resultImformations.length-1].mssv}</th>  
+                          <th>${resultImformations[resultImformations.length-1].name}</th>  
+                          <th>${resultImformations[resultImformations.length-1].class}</th>  
+                          <th>${resultImformations[resultImformations.length-1].num}</th>  
+                          <th>${resultImformations[resultImformations.length-1].email}</th>  
+                        </tr>`)
                 }
 
             })

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/jquery-3.6.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+
+    <style>
+        [class*='col-']
+        {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        nav li {
+            width: 200px;
+        }
+    </style>
+
+    <script>
+        $(document).ready(() => {
+            $('#register').click(() => {
+                $('#register-modal').modal('show')
+            })
+            $('#close-btn').click(() => {
+                $('#register-modal').modal('hide')
+            })
+
+            // Validation
+            const Validation = [
+                {
+                    name: $('#name-input'),
+                    label:$('#name-label'),
+                    span:$('#name-span'),
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    regex: /(^[A-Z]{1})([a-z]+)(\s[A-Z]{1}([a-z])*)+$/,
+                    already: false,
+                },
+                {
+                    name: $('#num-input'),
+                    label:$('#num-label'),
+                    span:$('#num-span'),
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    regex: /^(0){1}[0-9]{9}$/,
+                    already: false,
+                },
+                {
+                    name: $('#date-input'),
+                    label:$('#date-label'),
+                    span:$('#date-span'),
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    regex: /^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/,
+                    already: false,
+                },
+                {
+                    name: $('#addr-input'),
+                    label:$('#addr-label'),
+                    span:false,
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    regex: false,
+                    already: true,
+                },
+                {
+                    name: $('#course-input'),
+                    label:$('#course-label'),
+                    span:false,
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    regex: false,
+                    already: true,
+                },
+                {
+                    name: $('#price-input'),
+                    label:$('#price-label'),
+                    span:false,
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    regex: false,
+                    already: true,
+                },
+                {
+                    name: $('#image-input'),
+                    label:$('#image-label'),
+                    span:$('#image-span'),
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    regex: true,
+                    already: false,
+                }
+            ]
+            
+            
+            const handelNotValue = (item) => {
+                item.label.remove("text-success")
+                item.label.addClass("text-danger")
+                item.name.removeClass("border-success")
+                item.name.addClass("border-danger")
+                if(item.span) {
+                    item.span.text(item.mes_default)
+                }
+                item.already = false
+            }
+
+            const handelErrorValue = (item) => {
+                item.label.remove("text-success")
+                item.label.addClass("text-danger")
+                item.name.removeClass("border-success")
+                item.name.addClass("border-danger")
+                if(item.span) {
+                    item.span.text(item.mes_error)
+                }
+                item.already = false
+            }
+
+            const handelSuccessValue = (item) => {
+                item.label.removeClass("text-danger")
+                item.label.addClass("text-success")
+                item.name.removeClass("border-danger")
+                item.name.addClass("border-success")
+                if(item.span) {
+                    item.span.text("")
+                }
+                item.already = true
+            }
+            const handelRemoveClass = (item) => {
+                item.label.removeClass("text-danger")
+                item.label.removeClass("text-success")
+                item.name.removeClass("border-danger")
+                item.name.removeClass("border-success")
+                if(item.regex){
+                    item.name.val('')
+                }
+                if(item.span) {
+                    item.span.text("*")
+                }
+                $('#register-modal').modal('hide')
+            }
+
+            const price = $("#price-input")
+            let course = parseInt($("#course-input").val())
+            price.val("5000000")
+
+            Validation.map(item => {
+                item.name.blur(() => {
+                    if(!item.regex){
+                        handelSuccessValue(item)
+                    }else {
+                        if(!item.name.val()){handelNotValue(item)}
+                        else if(item.regex === true){handelSuccessValue(item)}
+                        else if(!item.regex.test(item.name.val())){handelErrorValue(item)}
+                        else{handelSuccessValue(item)}
+                    }
+                    course =  $("#course-input").val()
+                })
+            })
+                    
+            $('#course-input').blur(() => {
+                if(parseInt(course) === 2) price.val("5000000")
+                if(parseInt(course) === 4) price.val("8000000")
+                if(parseInt(course) === 6) price.val("9000000")
+            })
+
+            const render = $('#render')
+            let i = 0
+            $('#submit').click(() => {
+                let checked = true
+                Validation.map(item => {
+                    if(!item.already)
+                    {
+                        handelNotValue(item)
+                        checked = false
+                    }
+                })
+                if(checked)
+                {
+                    render.append(`<tr>
+                        <th>${i}</th>
+                        ${
+                            Validation.map(item => (
+                                `<th>${item.name.val()}</th>`
+                            ))
+                        }
+                    </tr>`)
+                    i++;
+                    for (let x in Validation){handelRemoveClass(Validation[x])}
+                }
+            })
+
+
+
+        })
+    </script>
+
+</head>
+<body>
+    <div class="container border">
+        <div class="row">
+            <img src="./Images/website.png" alt="banner" width="100%" height="200px">
+        </div>
+        <div class="row border">
+            <nav class="nav">
+                <ul class="navbar-nav nav navbar-brand navbar-expand navbar-collapse">
+                    <li class="nav-item"><a class="nav-link" href="#">Trang chủ SYC</a></li>
+                    <li class="nav-item" id="register"><a class="nav-link" href="#">Đăng kí tham gia</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="row justify-content-center">
+            <h2 class="text-uppercase">Danh sách học viên đăng kí</h2>
+        </div>
+        <div class="row">
+            <table class="table table-hover table-bordered" id="render">
+                <tr>
+                    <th>STT</th>
+                    <th>Họ và tên</th>
+                    <th>Số điện thoại</th>
+                    <th>Ngày sinh</th>
+                    <th>Địa chỉ</th>
+                    <th>Khóa học</th>
+                    <th>Học phí</th>
+                    <th>Ảnh đại diện</th>
+                </tr>
+
+                <tr>
+                    <th>1</th>
+                    <th>Hoàng Lâm</th>
+                    <th>0123456789</th>
+                    <th>20/3/2010</th>
+                    <th>123 Nguyễn Du P5 Gò Vấp TPHCM</th>
+                    <th>6 tuần</th>
+                    <th>8000000</th>
+                    <th>../img/pro7</th>
+                </tr>
+            </table>
+        </div>
+        <div class="row">
+            <p>MSSV_HO VA TEN_LOP</p>
+        </div>
+
+        <div class="row">
+            <div class="modal" id="register-modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="text-uppercase">Thông tin cá nhân</h4>
+                            <button id="close-btn" class="text-right align-text-top border-0 bg-transparent">x</button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-control">
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
+                                    <div class="col-6 col-sm-3">
+                                        <label id="name-label">Họ tên:</label>
+                                    </div>
+                                    <div class="col-6 col-sm-9">
+                                        <input id="name-input" class="form-control" type="text">
+                                        <span id="name-span" class="text-danger">*</span>
+                                    </div>
+                                </div>
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
+                                    <div class="col-6 col-sm-3">
+                                        <label id="num-label">Số điện thoại:</label>
+                                    </div>
+                                    <div class="col-6 col-sm-9">
+                                        <input id="num-input" class="form-control" type="text">
+                                        <span id="num-span" class="text-danger">*</span>
+                                    </div>
+                                </div>
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
+                                    <div class="col-6 col-sm-3">
+                                        <label id="date-label">Ngày sinh:</label>
+                                    </div>
+                                    <div class="col-6 col-sm-9">
+                                        <input id="date-input" class="form-control" type="date">
+                                        <span id="date-span" class="text-danger">*</span>
+                                    </div>
+                                </div>
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
+                                    <div class="col-6 col-sm-3">
+                                        <label id="addr-label">Địa chỉ:</label>
+                                    </div>
+                                    <div class="col-6 col-sm-9">
+                                        <input id="addr-input" class="form-control" type="text">
+                                    </div>
+                                </div>
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
+                                    <div class="col-6 col-sm-3">
+                                        <label id="course-label">Bạn muốn tham gia khóa học nào?</label>
+                                    </div>
+                                    <div class="col-6 col-sm-9">
+                                        <select id="course-input" class="form-control">
+                                            <option value="2 tuần">2 tuần</option>
+                                            <option value="4 tuần">4 tuần</option>
+                                            <option value="6 tuần">6 tuần</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
+                                    <div class="col-6 col-sm-3">
+                                        <label id="price-label">Học phí:</label>
+                                    </div>
+                                    <div class="col-6 col-sm-9">
+                                        <input id="price-input" class="form-control" type="button">
+                                    </div>
+                                </div>
+                                <div class="row  mb-3 mt-3 mr-3 ml-3">
+                                    <div class="col-6 col-sm-3">
+                                        <label id="image-label">Ảnh đại diện:</label>
+                                    </div>
+                                    <div class="col-6 col-sm-9">
+                                        <input id="image-input" class="form-control" type="file">
+                                        <span id="image-span" class="text-danger">*</span>
+                                    </div>
+                                </div>
+                                <div class="row border-top">
+                                    <input id="submit" type="button" class="col bg-success border-0 mb-3 mt-3 mr-3 ml-3" value="Lưu">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

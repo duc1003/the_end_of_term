@@ -35,8 +35,7 @@
             $('#close-btn').click(() => {
                 $('#register').modal('hide')
             })
-
-            // Validaytion
+            // Validation
             const Validation = [
                 {
                     name: $('#mssv'),
@@ -118,7 +117,7 @@
                 item.label.addClass("text-success")
                 item.name.removeClass("border-danger")
                 item.name.addClass("border-success")
-                item.span.text("")
+                item.span.text('')
                 item.already = true
             }
             const handelRemoveClass = (item) => {
@@ -166,7 +165,6 @@
                     for (let x in Validation){handelRemoveClass(Validation[x])}
                 }
             })
-            
         })
     </script>
 </head>
