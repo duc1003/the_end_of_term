@@ -36,7 +36,7 @@
                     span: $("#describe-span"),
                     mes_er_def: 'Bắt buộc nhập!',
                     mes_er: '----',
-                    regex: /^[\w~!@#$%^&*()_+\s]{1,}$/,
+                    regex: true,
                     already: false,
                 },
                 {
@@ -54,7 +54,7 @@
                     span: $("#weight-span"),
                     mes_er_def: 'Bắt buộc nhập!',
                     mes_er: 'Trọng lượng là số > 0',
-                    regex: /^[1-9]{1,}$/,
+                    regex: /^[1-9]{1}([0-9.,]{1,})*$/,
                     already: false,
                 },
                 {
