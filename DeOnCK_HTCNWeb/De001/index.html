@@ -10,233 +10,193 @@
     <script src="../js/jquery-3.6.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
 
+    <script>
+        $(document).ready(() => {
+            $("#showModal").click(() => {
+                $("#myModal").modal('show')
+            })
+            $("#close-btn").click(() => {
+                $("#myModal").modal('hide')
+            })
 
 
-    <style>
-        
-        nav li 
-        {
-            width: 100px;
-        }
-        
-        section li 
-        {
-            list-style: square;
-        }
-        
-        [class*="col-"]
-        {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-        }
-        
-        .bg-header 
-        {
-            background-color: #fec107;
-        }
-        
-        .h-200
-        {
-            height: 200px;
-        } 
-        
-        .bg-gray 
-        {
-            background-color: rgba(101, 99, 99,0.2);
-        }
-        
-        #submit
-        {
-            border-radius: 8px;
-        }
-        </style>
+            const Validation = [
+                {
+                    name: $("#seri-input"),
+                    label: $("#seri-label"),
+                    span: $("#seri-span"),
+                    mes_er_def: 'Bắt buộc nhập!',
+                    mes_er: 'gồm các ký tự chữ cái hoa, dấu _ và các ký số; chiều dài ít nhất là 6',
+                    regex: /^([A-Z0-9.-]){6,}$/,
+                    already: true,
+                },
+                {
+                    name: $("#describe-input"),
+                    label: $("#describe-label"),
+                    span: $("#describe-span"),
+                    mes_er_def: 'Bắt buộc nhập!',
+                    mes_er: '----',
+                    regex: /^[\w~!@#$%^&*()_+\s]{1,}$/,
+                    already: false,
+                },
+                {
+                    name: $("#image-input"),
+                    label: $("#image-label"),
+                    span: $("#image-span"),
+                    mes_er_def: 'Bắt buộc nhập!',
+                    mes_er: '----',
+                    regex: true,
+                    already: false,
+                },
+                {
+                    name: $("#weight-input"),
+                    label: $("#weight-label"),
+                    span: $("#weight-span"),
+                    mes_er_def: 'Bắt buộc nhập!',
+                    mes_er: 'Trọng lượng là số > 0',
+                    regex: /^[1-9]{1,}$/,
+                    already: false,
+                },
+                {
+                    name: $('#price-input'),
+                    label: $('#price-label'),
+                    span: false,
+                    mes_default: 'Bắt buộc nhập!',
+                    mes_error: 'Nhập sai',
+                    regex: false,
+                    already: true,
+                },
+            ]
 
-        <script>
-            $(document).ready(() => {
-                $("#showModal").click(() => {
-                    $("#myModal").modal('show')
-                })
-                $("#close-btn").click(() => {
-                    $("#myModal").modal('hide')
-                })
-
-                
-                const Validation = [
-                    {
-                        name:$("#seri-input"),
-                        label:$("#seri-label"),
-                        span:$("#seri-span"),
-                        mes_er_def:'Bắt buộc nhập!',
-                        mes_er:'----',
-                        regex: /^[A-Z0-9.-]{3}$/,
-                        already: true,
-                    },
-                    {
-                        name:$("#describe-input"),
-                        label:$("#describe-label"),
-                        span:$("#describe-span"),
-                        mes_er_def:'Bắt buộc nhập!',
-                        mes_er:'----',
-                        regex: false,
-                        already: false,
-                    },
-                    {
-                        name:$("#image-input"),
-                        label:$("#image-label"),
-                        span:$("#image-span"),
-                        mes_er_def:'Bắt buộc nhập!',
-                        mes_er:'----',
-                        regex: false,
-                        already: false,
-                    },
-                    {
-                        name:$("#weight-input"),
-                        label:$("#weight-label"),
-                        span:$("#weight-span"),
-                        mes_er_def:'Bắt buộc nhập!',
-                        mes_er:'----',
-                        regex: false,
-                        already: false,
-                    },
-                    
-                ]
-
-                const handelNotValue = (item) => {
-                    item.label.remove("text-success")
-                    item.label.addClass("text-danger")
-                    item.name.removeClass("border-success")
-                    item.name.addClass("border-danger")
-                    if(item.span)
-                    {
-                        item.span.text(item.mes_er_def)
-                    }
-                    item.already = false
-                }
-
-                const handelErrorValue = (item) => {
+            const handelNotValue = (item) => {
                 item.label.remove("text-success")
                 item.label.addClass("text-danger")
                 item.name.removeClass("border-success")
                 item.name.addClass("border-danger")
-                if(item.span)
-                {
+                if (item.span) {
+                    item.span.text(item.mes_er_def)
+                }
+                item.already = false
+            }
+
+            const handelErrorValue = (item) => {
+
+                item.label.remove("text-success")
+                item.label.addClass("text-danger")
+                item.name.removeClass("border-success")
+                item.name.addClass("border-danger")
+                if (item.span) {
                     item.span.text(item.mes_er)
                 }
                 item.already = false
-                }
+            }
 
-                const handelSuccessValue = (item) => {
-                    item.label.removeClass("text-danger")
-                    item.label.addClass("text-success")
-                    item.name.removeClass("border-danger")
-                    item.name.addClass("border-success")
-                    if(item.span)
-                    {
-                        item.span.text("")
-                    }
-                    item.already = true
+            const handelSuccessValue = (item) => {
+                item.label.removeClass("text-danger")
+                item.label.addClass("text-success")
+                item.name.removeClass("border-danger")
+                item.name.addClass("border-success")
+                if (item.span) {
+                    item.span.text("")
                 }
-                const handelRemoveClass = (item) => {
-                    item.label.removeClass("text-danger")
-                    item.label.removeClass("text-success")
-                    item.name.removeClass("border-danger")
-                    item.name.removeClass("border-success")
-                    item.name.val('')
-                    if(item.span)
-                    {
-                        item.span.text("*")
-                    }
-                    $('#myModal').modal('hide')
+                item.already = true
+            }
+            const handelRemoveClass = (item) => {
+                item.label.removeClass("text-danger")
+                item.label.removeClass("text-success")
+                item.name.removeClass("border-danger")
+                item.name.removeClass("border-success")
+                item.name.val('')
+                if (item.span) {
+                    item.span.text("*")
                 }
-                
-                let weight = 0
-                const price = $('#price-input')
-                Validation.map(item => {
-                    item.name.blur(() => {
-                        if(item.regex){
-                            if(!item.regex.test(item.name.val())) handelErrorValue(item)
-                            if(!item.name.val()) handelSuccessValue(item)
-                        } else {
-                            if(!item.name.val()) handelNotValue(item)
-                            else {
-                                if(!item.name.val()) handelNotValue(item)
-                                else handelSuccessValue(item)
-                            } 
-                        }
-                        weight = parseFloat($("#weight-input").val())
-                    })
-                })
-                
-                const checkPrice = (weight) => {
-                    if(weight > 50) price.val(weight * 15000);
-                    else if(weight > 20) price.val(weight * 30000);
-                    else if(weight > 0) price.val(weight * 35000);
-                }
-                        
-                $('#weight-input').blur(() => {
-                    checkPrice(weight)
-                })
+                $('#myModal').modal('hide')
+            }
 
-                const render = $('#render')
-                let i = 0
-                $('#submit').click(() => {
-                    let checked = true
-                    Validation.map(item => {
-                        if(!item.already)
-                        {
-                            handelNotValue(item)
-                            checked = false
-                        }
-                    })
-                    if(checked)
-                    {
-                        render.append(`<tr>
-                            <th>${i}</th>
-                            ${
-                                Validation.map(item => (
-                                    `<th>${item.name.val()}</th>`
-                                ))
-                            }
-                            <th>${price.val()}</th>
-                        </tr>`)
-                        i++;
-                        for (let x in Validation){handelRemoveClass(Validation[x])}
-                    }
-                })
-                            
+            const price = $("#price-input")
+            let weight = Number($("#weight-input").val())
 
+            price.val("5000000")
+
+            Validation.map(item => {
+                item.name.blur(() => {
+                    if (!item.regex) {
+                        handelSuccessValue(item)
+                    } else {
+                        if (!item.name.val()) { handelNotValue(item) }
+                        else if (item.regex === true) { handelSuccessValue(item) }
+                        else if (!item.regex.test(item.name.val())) { handelErrorValue(item) }
+                        else { handelSuccessValue(item) }
+                    }
+                    weight = $("#weight-input").val()
+                })
+            })
+
+            $('#weight-input').blur(() => {
+                let val = Number(weight)
+
+                if (val > 50) price.val(val * 15000);
+                else if (val > 20) price.val(val * 30000);
+                else if (val > 0) price.val(val * 35000);
+                else price.val('')
 
             })
-        </script>
+
+            const render = $('#render')
+            let i = 2
+            $('#submit').click(() => {
+                let checked = true
+                Validation.map(item => {
+                    if (!item.already) {
+                        handelNotValue(item)
+                        checked = false
+                    }
+                })
+                if (checked) {
+                    render.append(`<tr>
+                        <th>${i}</th>
+                        ${Validation.map(item => (
+                        `<th>${item.name.val()}</th>`
+                    ))
+                        }
+                    </tr>`)
+                    i++;
+                    for (let x in Validation) { handelRemoveClass(Validation[x]) }
+                }
+            })
+
+        })
+    </script>
 
 </head>
+
 <body>
     <div class="container-fluid border">
-        <div class="row bg-header align-items-center">
-            <img src="./img/logo7.png" alt="logo" class="col-4 col-sm-4">
-            <nav class="navbar-collapse navbar-expand navbar-brand col-8 col-sm-8">
-                <ul class="navbar-nav justify-content-between">
-                    <li class="nav-item"><a href="#" class="nav-link">Trang chủ</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Giới thiệu</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Dịch vụ</a></li>
-                    <li class="nav-item" id="showModal"><a href="#" class="nav-link">Ký gửi hàng hóa</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Liên hệ</a></li>
+        <div class="row bg-warning align-items-center p-3 bg-warning">
+            <img src="./img/logo7.png" alt="">
+            <nav class="navbar-expand pl-4 ">
+                <ul class="navbar-nav ">
+                    <li class=" nav-item"><a href="#" class="nav-link">Trang chu</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Gioi Thieu</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Dich vu</a></li>
+                    <li class="nav-item"><a href="#" id="showModal" class="nav-link">Ky Gui Hang Hoa</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Lien He</a></li>
                 </ul>
             </nav>
         </div>
-        <div class="row">
-            <aside class="col-8 col-sm-8">
-                <p>form</p>
-            </aside>
-            <section class="col-4 col-sm-4 border">
-                <h3 class="text-uppercase">Qui định thanh toán</h3>
-                <ul>
+
+        <div class="row justify-content-end border border-secondary ">
+
+            <div class="col-3 border-left border-secondary">
+                <h2 class="m-2">Qui định thanh toán</h2>
+                <ul class="mt-4 mb-4">
                     <li>Khách cọc từ 70% - 100% số tiền của đơn hàng.</li>
                     <li>Hàng về sau 24-48 tiếng kể từ khi kho Trung Quốc ký nhận.</li>
-                    <li>Shop sẽ thanh lý đơn hàng nếu sau 1 tuần khách hàng không thanh toán tiền nhận hàng.</li>
+                    <li> Shop sẽ thanh lý đơn hàng nếu sau 1 tuần khách hàng không thanh toán tiền nhận hàng.</li>
                 </ul>
-            </section>
+
+            </div>
+
         </div>
         <div class="row">
             <h2 class="text-left">Danh sách kiện hàng hóa gửi</h2>
@@ -252,7 +212,7 @@
                     <th>Phí vận chuyển (VND)</th>
                 </tr>
                 <tr>
-                    <th>1</th>
+                    <th>0</th>
                     <th>OZMO-600</th>
                     <th>Robot Hút Bụi Lau Nhà Dreame D9 Pro</th>
                     <th>..\image\Pro9.PNG</th>
@@ -260,7 +220,7 @@
                     <th>122500</th>
                 </tr>
                 <tr>
-                    <th>2</th>
+                    <th>1</th>
                     <th>SMS25EI00G</th>
                     <th>Máy rửa chén độc lập Bosch TGB - Serie 2</th>
                     <th>..\image\Bosch TGB.SMS25EI00G.PNG</th>
@@ -281,7 +241,7 @@
                             <button class="bg-transparent border-0" type="button" id="close-btn">x</button>
                         </div>
                         <div class="modal-body">
-                            <form  class="form-control">
+                            <form class="form-control">
                                 <div class="row ml-1 mr-1 mb-3">
                                     <div class="col-6 col-sm-3">
                                         <label id="seri-label">Số serial:</label>
@@ -296,7 +256,8 @@
                                         <label id="describe-label">Mô tả kiện hàng:</label>
                                     </div>
                                     <div class="col-6 col-sm-9">
-                                        <input id="describe-input" type="text" class="form-control" placeholder="Robot Hút Bụi Lau Nhà Dreame D9 Pro">
+                                        <input id="describe-input" type="text" class="form-control"
+                                            placeholder="Robot Hút Bụi Lau Nhà Dreame D9 Pro">
                                         <span id="describe-span" class="text-danger">*</span>
                                     </div>
                                 </div>
@@ -323,11 +284,13 @@
                                         <label id="price-label" aria-disabled="false">Chi phí vận chuyển (VND):</label>
                                     </div>
                                     <div class="col-6 col-sm-9">
-                                        <input id="price-input" type="button" class="form-control bg-gray" value="122500">
+                                        <input id="price-input" type="button" class="form-control bg-gray"
+                                            value="122500" disabled>
                                     </div>
                                 </div>
                                 <div class="row ml-1 mr-1 mb-3">
-                                    <button type="submit" class="border-primary text-primary bg-transparent" id="submit">Xác nhận</button>
+                                    <button type="submit" class="border-primary text-primary bg-transparent"
+                                        id="submit">Xác nhận</button>
                                 </div>
                             </form>
                         </div>
